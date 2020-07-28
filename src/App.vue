@@ -11,6 +11,7 @@ export default {
         return {};
     },
     mounted() {
+        console.log(this.$router.currentRoute);
         //本地加载请求静态json文件的形式  mock
         // this.$axios.get('/mock/user/login.json').then(res => {
         // 	this.res = res;

@@ -8,11 +8,7 @@
                             <span>手机 电话卡</span>
                             <div class="children">
                                 <ul v-for="(item, index) in menuList" :key="index">
-                                    <li
-                                        v-for="(sub, i) in item"
-                                        :key="i"
-                                        @click="$router.push('/product/' + sub.id)"
-                                    >
+                                    <li v-for="(sub, i) in item" :key="i" @click="$router.push('/product/' + sub.id)">
                                         <img :src="sub ? sub.img : '/imgs/item-box-1.png'" />
                                         {{ sub ? sub.name : '小米9' }}
                                     </li>
@@ -55,12 +51,7 @@
                 </swiper>
             </div>
             <div class="ads-box">
-                <a
-                    href="'/product/'+item.id"
-                    target="_blank"
-                    v-for="(item, index) in adsList"
-                    :key="index"
-                >
+                <a href="'/product/'+item.id" target="_blank" v-for="(item, index) in adsList" :key="index">
                     <img v-lazy="item.img" />
                 </a>
             </div>
@@ -115,74 +106,74 @@
 </template>
 
 <script>
-import ServiceBar from "../components/ServiceBar";
-import Modal from "../components/Modal";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
-import "swiper/css/swiper.css";
+import ServiceBar from '../components/ServiceBar';
+import Modal from '../components/Modal';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import 'swiper/css/swiper.css';
 export default {
-    name: "Index",
+    name: 'Index',
     data() {
         return {
             swiperOption: {
                 autoplay: true,
                 loop: true,
-                effect: "cube",
+                effect: 'cube',
                 cubeEffect: {
                     shadowOffset: 100,
                     shadowScale: 0.6
                 },
                 pagination: {
-                    el: ".swiper-pagination",
+                    el: '.swiper-pagination',
                     clickable: true
                 },
                 navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev"
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
                 }
             },
             slideList: [
                 {
-                    id: "42",
-                    img: "/imgs/slider/slide-1.jpg"
+                    id: '42',
+                    img: '/imgs/slider/slide-1.jpg'
                 },
                 {
-                    id: "45",
-                    img: "/imgs/slider/slide-2.jpg"
+                    id: '45',
+                    img: '/imgs/slider/slide-2.jpg'
                 },
                 {
-                    id: "46",
-                    img: "/imgs/slider/slide-3.jpg"
+                    id: '46',
+                    img: '/imgs/slider/slide-3.jpg'
                 },
                 {
-                    id: "",
-                    img: "/imgs/slider/slide-4.jpg"
+                    id: '',
+                    img: '/imgs/slider/slide-4.jpg'
                 },
                 {
-                    id: "",
-                    img: "/imgs/slider/slide-5.jpg"
+                    id: '',
+                    img: '/imgs/slider/slide-5.jpg'
                 }
             ],
             menuList: [
                 [
                     {
                         id: 30,
-                        img: "/imgs/item-box-1.png",
-                        name: "小米CC9"
+                        img: '/imgs/item-box-1.png',
+                        name: '小米CC9'
                     },
                     {
                         id: 31,
-                        img: "/imgs/item-box-2.png",
-                        name: "小米8青春版"
+                        img: '/imgs/item-box-2.png',
+                        name: '小米8青春版'
                     },
                     {
                         id: 32,
-                        img: "/imgs/item-box-3.jpg",
-                        name: "Redmi K20 Pro"
+                        img: '/imgs/item-box-3.jpg',
+                        name: 'Redmi K20 Pro'
                     },
                     {
                         id: 33,
-                        img: "/imgs/item-box-4.jpg",
-                        name: "移动4G专区"
+                        img: '/imgs/item-box-4.jpg',
+                        name: '移动4G专区'
                     }
                 ],
                 [0, 0, 0, 0],
@@ -194,19 +185,19 @@ export default {
             adsList: [
                 {
                     id: 33,
-                    img: "/imgs/ads/ads-1.png"
+                    img: '/imgs/ads/ads-1.jpg'
                 },
                 {
                     id: 33,
-                    img: "/imgs/ads/ads-2.jpg"
+                    img: '/imgs/ads/ads-2.jpg'
                 },
                 {
                     id: 33,
-                    img: "/imgs/ads/ads-3.png"
+                    img: '/imgs/ads/ads-3.png'
                 },
                 {
                     id: 33,
-                    img: "/imgs/ads/ads-4.jpg"
+                    img: '/imgs/ads/ads-4.jpg'
                 }
             ],
             phoneList: [],
@@ -215,54 +206,51 @@ export default {
     },
     created() {
         this.getData();
-        if (this.$cookie.get("userId")) {
+        if (this.$cookie.get('userId')) {
             this.getCartCount();
         }
     },
     methods: {
         getData() {
             this.$axios
-                .get("/products", {
+                .get('/products', {
                     params: {
                         categoryId: 100012,
                         pageSize: 14
                     }
                 })
-                .then(res => {
+                .then((res) => {
                     // console.log(res);
                     res.list = res.list.slice(6, 14);
                     this.phoneList = res.list;
                 });
         },
         getCartCount() {
-            this.$axios.get("/carts/products/sum").then(res => {
-                this.$store.dispatch("saveCartCount", res);
-                sessionStorage.setItem("cartCount", res);
+            this.$axios.get('/carts/products/sum').then((res) => {
+                this.$store.dispatch('saveCartCount', res);
+                sessionStorage.setItem('cartCount', res);
             });
         },
         addCart(item) {
-            if (this.$cookie.get("userId")) {
+            if (this.$cookie.get('userId')) {
                 this.$axios
-                    .post("/carts", {
+                    .post('/carts', {
                         productId: item.id,
                         selected: true
                     })
-                    .then(res => {
+                    .then((res) => {
                         this.showModal = true;
-                        this.$store.dispatch(
-                            "saveCartCount",
-                            res.cartTotalQuantity
-                        );
+                        this.$store.dispatch('saveCartCount', res.cartTotalQuantity);
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         this.showModal = true;
                     });
             } else {
-                this.$router.push("/login");
+                this.$router.push('/login');
             }
         },
         goToCart() {
-            this.$router.push("/cart");
+            this.$router.push('/cart');
         }
     },
     components: {
@@ -299,12 +287,8 @@ export default {
                                 position: absolute;
                                 right: 30px;
                                 top: 17.5px;
-                                content: "";
-                                @include bgImg(
-                                    10px,
-                                    15px,
-                                    "/imgs/icon-arrow.png"
-                                );
+                                content: '';
+                                @include bgImg(10px, 15px, '/imgs/icon-arrow.png');
                             }
                         }
                         &:hover {
@@ -446,12 +430,8 @@ export default {
                                     line-height: 22px;
                                     cursor: pointer;
                                     &::after {
-                                        @include bgImg(
-                                            22px,
-                                            22px,
-                                            "/imgs/icon-cart-hover.png"
-                                        );
-                                        content: " ";
+                                        @include bgImg(22px, 22px, '/imgs/icon-cart-hover.png');
+                                        content: ' ';
                                         margin-left: 5px;
                                         vertical-align: middle;
                                     }
